@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# from resources.lib import kodiutils
-# from resources.lib import kodilogging
 import json
 import logging
 import os
@@ -14,7 +12,7 @@ import xbmcvfs
 
 from .kodi_utils import do_rpc
 
-from .player import AutoStreamSelectPlayer
+from .player import SaasbopsPlayer
 from .storage import Storage
 from .tracker import Tracker
 
@@ -54,7 +52,7 @@ def run():
 
     periodic_updater = PeriodicUpdater(1, None)
     tracker = Tracker(periodic_updater, storage)
-    player = AutoStreamSelectPlayer(tracker)
+    player = SaasbopsPlayer(tracker)
 
     # 2 way dependency between tracker and player :(
     def set_audio_stream(stream):

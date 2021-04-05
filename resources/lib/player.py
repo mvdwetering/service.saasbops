@@ -7,7 +7,7 @@ import xbmcaddon
 ADDON = xbmcaddon.Addon()
 logger = logging.getLogger(ADDON.getAddonInfo('id'))
 
-class AutoStreamSelectPlayer(xbmc.Player):
+class SaasbopsPlayer(xbmc.Player):
 
     def __init__(self, tracker:Tracker):
         logger.debug("--> PlayerInit")
@@ -18,46 +18,30 @@ class AutoStreamSelectPlayer(xbmc.Player):
             self._tracker.start()
 
     def onAVStarted(self):
-        logger.warning("--> onAVStarted")
-        logger.warning(xbmc.Player().isPlayingVideo())
+        logger.debug("--> onAVStarted")
         self._tracker.start()
-        # xbmc.getInfoLabel('infolabel').
-        # item_info = get_item_info()
-        # if item_info and item_info["type"] == "episode":
-        #     # Get identifiers
-        #     tv_show_id = item_info["tvshowid"]
-        #     showtitle = item_info["showtitle"]
-        #     season = item_info["season"]
-        #     episode = item_info["season"]
-
-        #     # Get audio info, item info is not good enough
-        #     properties = get_properties()
-        #     audio_stream = properties["currentaudiostream"]
-        #     audio_stream_index = properties["currentaudiostream"]["index"]
-        #     audio_stream_name = properties["currentaudiostream"]["name"]
-
 
     def onAVChange(self):
-        logger.warning("--> onAVChange")
+        logger.debug("--> onAVChange")
 
     def onPlayBackStarted(self):
-        logger.warning("--> onPlayBackStarted")
+        logger.debug("--> onPlayBackStarted")
 
     def onPlayBackEnded(self):
-        logger.warning("--> onPlayBackEnded")
+        logger.debug("--> onPlayBackEnded")
 
     def onPlayBackStopped(self):
-        logger.warning("--> onPlayBackStopped")
+        logger.debug("--> onPlayBackStopped")
         self._tracker.stop()
 
     def onPlayBackPaused(self):
-        logger.warning("--> onPlayBackPaused")
+        logger.debug("--> onPlayBackPaused")
 
     def onPlayBackResumed(self):
-        logger.warning("--> onPlayBackResumed")
+        logger.debug("--> onPlayBackResumed")
 
     def onPlayBackSeek(self):
-        logger.warning("--> onPlayBackSeek")
+        logger.debug("--> onPlayBackSeek")
 
     def onPlayBackSeekChapter(self):
-        logger.warning("--> onPlayBackSeekChapter")
+        logger.debug("--> onPlayBackSeekChapter")

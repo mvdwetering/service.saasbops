@@ -1,6 +1,6 @@
 # Kodi Media Center language file
 # Addon Name: Auto Stream Select
-# Addon id: service.autostreamselect
+# Addon id: service.saasbops
 # Addon Provider: Michel van de Wetering
 msgid ""
 msgstr ""
