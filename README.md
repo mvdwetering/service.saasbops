@@ -1,13 +1,41 @@
-# Welcome to your addon
+# Saasbops
 
-1. You might want to move this folder into the kodi addon folder for convinience when debugging. It might also be needed to be `enabled` inside of the kodi addon browser.
-2. Now start coding! Just open up the `.py` file in this folder and create what you would like Kodi to do! If you're creating a plugin, please check out [this kodi routing framework](https://github.com/tamland/kodi-plugin-routing) and copy a version of that module to your kodi addon folder.
-3. Write some tests, maybe? Don't forget to activate [travis](https://travis-ci.org/) access to your repository. We've created a test folder and a travis config file for that, otherwise just delete those ;)
-4. You might want to look at your `addon.xml` it should already be filled, but you will need to understand what your doing and might want to fill in some more info. So read up [here](http://kodi.wiki/view/Addon.xml).
-5. Do you want some settings for your addon? Check the `settings.xml` in the resources folder. And read up [here](http://kodi.wiki/view/Settings.xml).
-6. Read [this info](http://kodi.wiki/view/Add-on_structure#icon.png) and drop an icon for your addon into the `resource` folder and name it `icon.png`.
-7. Read [this](http://kodi.wiki/view/Add-on_structure#fanart.jpg) and drop a addon background into the `resource` folder and name it `fanart.jpg`.
-8. End up with a beautiful Kodi addon! Good for you :) Maybe you want to [share it with us](http://kodi.wiki/view/Submitting_Add-on_updates_on_Github)?
+Select
+Audio
+And
+Subtitle
+Based
+On
+Previous
+Selection
 
-### Debugging
-To get the debug logging to work, just set the global kodi logging to true and the debug logging in your addons settings.
+## Description
+
+NOTE: This addon is intended for autoselection in series (not Movies as Kodi already rembers last selected)
+
+This addon does a different take on trying to select the correct audio/subtitle tracks.
+Other addons do this by guessing based on tags/tracknames or more complex logic.
+
+I found that these required quite some effort to get setup correctly with a lot of
+going back and forth between playing an episode and back to the addon settings.
+
+This addon takes out the guessing and instead it tries to select the same
+audio/subtitle track as selected for previous episodes on the series.
+This means that you need to once set the audio/subtitle correctly for the first episode
+you watch of a series, which is easily done when cycle audio/subtitle buttons are on your remote.
+The addon will try to apply that setting for later episodes.
+
+The downside of this is that it _does_ require consistent naming of audio/subtitle tracks,
+but that seems to be quite common to at least have it consistent during a season.
+
+## Background
+
+I like to watch movies/series with the orignal audio and Dutch (preferred) or English subtitles.
+
+It is hard to make an autoselection for this case as a lot of sources don't have a proper language
+set for the video track so you can not select origninal audio based on that. Some releases are dubs and
+even though they include the original audio the dubbed track is set as default.
+
+Subtitles should be easier except that Kodi does not allow to select multiple preferred subtitle languages.
+
+Hence the need for a better selection method.

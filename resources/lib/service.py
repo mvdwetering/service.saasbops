@@ -1,23 +1,78 @@
 # -*- coding: utf-8 -*-
 
-from resources.lib import kodiutils
-from resources.lib import kodilogging
+# from resources.lib import kodiutils
+# from resources.lib import kodilogging
+import json
 import logging
-import time
+import os
+from resources.lib.periodic_updater import PeriodicUpdater
+from typing import Any, Dict, Tuple
+
 import xbmc
 import xbmcaddon
+import xbmcvfs
 
+from .kodi_utils import do_rpc
+
+from .player import AutoStreamSelectPlayer
+from .storage import Storage
+from .tracker import Tracker
 
 ADDON = xbmcaddon.Addon()
-logger = logging.getLogger(ADDON.getAddonInfo('id'))
+ADDON_ID = ADDON.getAddonInfo("id")
+
+logger = logging.getLogger(ADDON_ID)
 
 
 def run():
-    monitor = xbmc.Monitor()
+    storage_path = os.path.join(xbmcvfs.translatePath("special://profile"), "addon_data", ADDON_ID)
+    data_filename = os.path.join(storage_path, "data.json")
 
+    logger.debug("Data filename: %s", data_filename)
+    os.makedirs(storage_path, exist_ok=True)
+
+    def load():
+        try:
+            with open(data_filename) as data_file:
+                data = json.load(data_file)
+                logger.debug("Read data from: %s", data_filename)
+                return data
+        except:
+            logger.debug("Data file %s did not exist return empty dict", data_filename)
+            return {}
+
+    def persist(data):
+        try:
+            with open(data_filename, 'w') as data_file:
+                logger.debug(data)
+                json.dump(data, data_file, indent=2)
+                logger.debug("Written: %s", data_filename)
+        except Exception as e:
+            logger.exception(e)
+            logger.error("Failed writing data file: %s", data_filename)
+    storage = Storage(load, persist)
+
+    periodic_updater = PeriodicUpdater(1, None)
+    tracker = Tracker(periodic_updater, storage)
+    player = AutoStreamSelectPlayer(tracker)
+
+    # 2 way dependency between tracker and player :(
+    def set_audio_stream(stream):
+        player.setAudioStream(stream)
+
+    def set_subtitle_stream(enabled, stream):
+        player.showSubtitles = enabled
+        if enabled:
+            player.setSubtitleStream(stream)
+
+    tracker.set_audio_stream = set_audio_stream
+    tracker.set_subtitle_stream = set_subtitle_stream
+
+    monitor = xbmc.Monitor()
     while not monitor.abortRequested():
-        # Sleep/wait for abort for 10 seconds
-        if monitor.waitForAbort(10):
+        # Sleep/wait for abort
+        if monitor.waitForAbort(1):
             # Abort was requested while waiting. We should exit
             break
-        logger.debug("hello addon! %s" % time.time())
+        # logger.info("hello addon! %s" % time.time())
+        periodic_updater.tick()
