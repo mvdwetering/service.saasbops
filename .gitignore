@@ -9,3 +9,5 @@
 Thumbs.db
 *~
 .cache
+__pycache__
+/.vscode
