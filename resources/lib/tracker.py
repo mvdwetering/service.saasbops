@@ -50,18 +50,10 @@ def find_subtitle_stream(requested_subtitle, subtitles) -> Optional[int]:
     return None
 
 
-class State(Enum):
-    STOPPED = 0
-    PLAYING = 1
-
-
 class Tracker():
 
     def __init__(self, periodic_updater: PeriodicUpdater, storage: Storage):
         logger.debug("--> Tracker Init")
-        self.item = None
-        self.type = None
-        self.state = State.STOPPED
         self.storage = storage
         self.periodic_updater = periodic_updater
         periodic_updater._callback = self._update_item  # Hmmm
@@ -155,11 +147,9 @@ class Tracker():
     def start(self):
         logger.debug("--> Start")
         self._reset()
-        self.state = State.PLAYING
         self._update_item(initial=True)
         self.periodic_updater.start()
 
     def stop(self):
         logger.debug("--> Stop")
         self.periodic_updater.stop()
-        self.state = State.STOPPED
