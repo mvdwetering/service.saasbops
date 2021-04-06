@@ -1,4 +1,3 @@
-import sched
 import time
 
 def _update():

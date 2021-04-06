@@ -1,10 +1,7 @@
 import logging
-import os
 from typing import Any
 
-import xbmc
 import xbmcaddon
-import xbmcvfs
 
 ADDON = xbmcaddon.Addon()
 addon_id = ADDON.getAddonInfo('id')

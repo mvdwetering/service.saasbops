@@ -72,5 +72,5 @@ def run():
         if monitor.waitForAbort(1):
             # Abort was requested while waiting. We should exit
             break
-        # logger.info("hello addon! %s" % time.time())
+        # Interval is determined by the waitForAbort timeout
         periodic_updater.tick()
