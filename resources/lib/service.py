@@ -10,7 +10,7 @@ import xbmc
 import xbmcaddon
 import xbmcvfs
 
-from .kodi_utils import do_rpc
+from .kodi_rpc import do_rpc
 
 from .player import SaasbopsPlayer
 from .storage import Storage

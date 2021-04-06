@@ -4,7 +4,7 @@ from typing import Optional
 
 import xbmcaddon
 
-from .kodi_utils import get_item_info, get_properties
+from .kodi_rpc import get_item_info, get_properties
 from .periodic_updater import PeriodicUpdater
 from .storage import Storage
 

@@ -4,13 +4,17 @@ import json
 
 import xbmc
 
+sequence = 0
+
 def do_rpc(method: str, params: Dict) -> Tuple[bool, Any]:
+    global sequence
     jsonrpc = {
         "jsonrpc": "2.0",
-        "id": 1,
+        "id": sequence,
         "method": method,
         "params": params
     }
+    sequence += 1
     response = xbmc.executeJSONRPC(json.dumps(jsonrpc))
     return json.loads(response) if "result" in response else None
 
