@@ -26,8 +26,7 @@ def same_subtitle(subtitle1, subtitle2) -> bool:
     if subtitle1 == subtitle2:
         return True
 
-    if (subtitle1 is None and subtitle2 is not None
-        or subtitle1 is not None and subtitle2 is None):
+    if subtitle1 is None or subtitle2 is None:
         return False
 
     if (subtitle1['name'] == subtitle2['name'] and
