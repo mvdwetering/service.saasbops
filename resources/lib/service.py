@@ -48,8 +48,8 @@ def run():
         except Exception as e:
             logger.exception(e)
             logger.error("Failed writing data file: %s", data_filename)
-    storage = Storage(load, persist)
 
+    storage = Storage(load, persist)
     periodic_updater = PeriodicUpdater(1, None)
     tracker = Tracker(periodic_updater, storage)
     player = SaasbopsPlayer(tracker)
@@ -62,6 +62,10 @@ def run():
         player.showSubtitles = enabled
         if enabled:
             player.setSubtitleStream(stream)
+        # For some reason subtitle changes take a while to start working
+        # Since this should happen only at the beginning of an episode
+        # just go back to the beginning and they will work "instantly"
+        player.seekTime(0)
 
     tracker.set_audio_stream = set_audio_stream
     tracker.set_subtitle_stream = set_subtitle_stream
