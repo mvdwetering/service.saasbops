@@ -4,6 +4,7 @@
         <import addon="xbmc.python" version="3.0.0"/>
     </requires>
     <extension point="xbmc.service" library="addon.py" start="startup"/>
+    <extension point="xbmc.python.script" library="script.py"/>
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">Select audio and subtitle based on previous selection</summary>
         <description lang="en_GB"></description>

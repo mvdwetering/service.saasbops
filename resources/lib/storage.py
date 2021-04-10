@@ -17,6 +17,9 @@ class Storage():
         if self._load:
             self._storage = self._load()
 
+    def reset(self, ) -> None:
+        self._storage = {}
+
     def get_info(self, show:int, season:int, episode:int) -> dict:
         # Strings to allow for storing as JSON (easier debugging than binary formats)
         show_str = str(show)

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import json
 import logging
 import os
@@ -15,6 +13,7 @@ from .kodi_rpc import do_rpc
 from .player import SaasbopsPlayer
 from .storage import Storage
 from .tracker import Tracker
+from .common import get_storage_path, get_preferences_filename
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo("id")
@@ -23,8 +22,8 @@ logger = logging.getLogger(ADDON_ID)
 
 
 def run():
-    storage_path = os.path.join(xbmcvfs.translatePath("special://profile"), "addon_data", ADDON_ID)
-    data_filename = os.path.join(storage_path, "data.json")
+    storage_path = get_storage_path()
+    data_filename = get_preferences_filename()
 
     logger.debug("Data filename: %s", data_filename)
     os.makedirs(storage_path, exist_ok=True)
@@ -71,10 +70,17 @@ def run():
     tracker.set_subtitle_stream = set_subtitle_stream
 
     monitor = xbmc.Monitor()
+    did_exist = os.path.exists(data_filename)
+
     while not monitor.abortRequested():
-        # Sleep/wait for abort
         if monitor.waitForAbort(1):
             # Abort was requested while waiting. We should exit
             break
-        # Interval is determined by the waitForAbort timeout
         periodic_updater.tick()
+
+        # Bit if a hack to clear the storage when the datafile
+        # is deleted by the script command
+        exists = os.path.exists(data_filename)
+        if did_exist and not exists:
+            storage.reset()
+        did_exist = exists

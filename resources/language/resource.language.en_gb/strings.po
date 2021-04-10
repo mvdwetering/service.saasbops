@@ -29,3 +29,11 @@ msgstr ""
 msgctxt "#32002"
 msgid "Enables debug logging for this addon. Next to this option also the generic Debuglogging option in Kodi has to be enabled"
 msgstr ""
+
+msgctxt "#32003"
+msgid "Reset preferences"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Deletes all stored audio and subtitle preferences"
+msgstr ""
