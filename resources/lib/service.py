@@ -2,16 +2,15 @@ import json
 import logging
 import os
 from resources.lib.periodic_updater import PeriodicUpdater
-from typing import Any, Dict, Tuple
+from typing import Any, Dict
 
 import xbmc
 import xbmcaddon
-import xbmcvfs
 
 from .kodi_rpc import do_rpc
 
 from .player import SaasbopsPlayer
-from .storage import Storage
+from .preferences import Preferences
 from .tracker import Tracker
 from .common import get_storage_path, get_preferences_filename
 
@@ -48,9 +47,9 @@ def run():
             logger.exception(e)
             logger.error("Failed writing data file: %s", data_filename)
 
-    storage = Storage(load, persist)
+    preferences = Preferences(load, persist)
     periodic_updater = PeriodicUpdater(1, None)
-    tracker = Tracker(periodic_updater, storage)
+    tracker = Tracker(periodic_updater, preferences)
     player = SaasbopsPlayer(tracker)
 
     # 2 way dependency between tracker and player :(
@@ -78,9 +77,9 @@ def run():
             break
         periodic_updater.tick()
 
-        # Bit if a hack to clear the storage when the datafile
+        # Bit if a hack to clear the prefences when the datafile
         # is deleted by the script command
         exists = os.path.exists(data_filename)
         if did_exist and not exists:
-            storage.reset()
+            preferences.reset()
         did_exist = exists

@@ -1,5 +1,5 @@
 import logging
-from typing import Any
+from typing import Any, Dict, Optional
 
 import xbmcaddon
 
@@ -8,7 +8,7 @@ addon_id = ADDON.getAddonInfo('id')
 logger = logging.getLogger(addon_id)
 
 
-class Storage():
+class Preferences():
     def __init__(self, load, persist) -> None:
         self._storage = {}
         self._load = load
@@ -20,7 +20,7 @@ class Storage():
     def reset(self, ) -> None:
         self._storage = {}
 
-    def get_info(self, show:int, season:int, episode:int) -> dict:
+    def get(self, show:int, season:int, episode:int) -> Optional[Dict]:
         # Strings to allow for storing as JSON (easier debugging than binary formats)
         show_str = str(show)
 
@@ -35,7 +35,7 @@ class Storage():
                     pass
 
 
-    def set_info(self, show:int, season:int, episode:int, info:Any) -> None:
+    def set(self, show:int, season:int, episode:int, info:Any) -> None:
         # Strings to allow for storing as JSON (easier debugging than binary formats)
         show = str(show)
         season = str(season)

@@ -1,12 +1,11 @@
 import logging
-from enum import Enum
 from typing import Optional
 
 import xbmcaddon
 
 from .kodi_rpc import get_item_info, get_properties
 from .periodic_updater import PeriodicUpdater
-from .storage import Storage
+from .preferences import Preferences
 
 ADDON = xbmcaddon.Addon()
 logger = logging.getLogger(ADDON.getAddonInfo('id'))
@@ -52,9 +51,9 @@ def find_subtitle_stream(requested_subtitle, subtitles) -> Optional[int]:
 
 class Tracker():
 
-    def __init__(self, periodic_updater: PeriodicUpdater, storage: Storage):
+    def __init__(self, periodic_updater: PeriodicUpdater, preferences: Preferences):
         logger.debug("--> Tracker Init")
-        self.storage = storage
+        self.preferences = preferences
         self.periodic_updater = periodic_updater
         periodic_updater._callback = self._update_item  # Hmmm
         self.audio = None
@@ -105,7 +104,7 @@ class Tracker():
                 self.audio = current_audio
                 self.subtitle = current_subtitle
 
-                stored_info = self.storage.get_info(show_id, season, episode)
+                stored_info = self.preferences.get(show_id, season, episode)
                 logger.debug("Initial info: %s", stored_info)
 
                 if stored_info is not None:
@@ -138,7 +137,7 @@ class Tracker():
                 if not same_audio(self.audio, current_audio) or not same_subtitle(self.subtitle, current_subtitle):
                     logger.debug("same_audio: %s\n    %s\n    %s", same_audio(self.audio, current_audio), self.audio, current_audio)
                     logger.debug("same_subtitle: %s\n    %s\n    %s", same_subtitle(self.subtitle, current_subtitle), self.subtitle, current_subtitle)
-                    self.storage.set_info(show_id, season, episode, {
+                    self.preferences.set(show_id, season, episode, {
                                           "audio": current_audio, "subtitle": current_subtitle})
 
         except Exception as e:

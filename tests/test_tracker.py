@@ -11,7 +11,7 @@ class TrackerTest(unittest.TestCase):
 
     def setUp(self):
         self.info = { "a": "b"}
-        self.initial_storage_data = {
+        self.initial_preference_data = {
             "1" : {
                 "2": {
                     "3": self.info
@@ -20,7 +20,7 @@ class TrackerTest(unittest.TestCase):
         }
 
         self.load  = mock.Mock()
-        self.load.return_value = self.initial_storage_data
+        self.load.return_value = self.initial_preference_data
 
         self.persist  = mock.Mock()
 
