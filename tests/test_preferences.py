@@ -1,43 +1,45 @@
-import os
 import sys
-import mock
+import os
 import unittest
+from unittest.mock import Mock
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# This line needs to be _before_ referencing resources.lib.*
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')))  # nopep8
 
 from resources.lib.preferences import Preferences
+
 
 class PreferencesTest(unittest.TestCase):
 
     def setUp(self):
-        self.info = { "a": "b"}
+        self.info = {"a": "b"}
         self.initial_preference_data = {
-            "1" : {
+            "1": {
                 "2": {
                     "3": self.info
                 }
             }
         }
 
-        self.load  = mock.Mock()
+        self.load = Mock()
         self.load.return_value = self.initial_preference_data
 
-        self.persist  = mock.Mock()
+        self.persist = Mock()
 
     def test_init(self):
         p = Preferences(None, None)
         p = Preferences(self.load, None)
         assert(self.load.call_count == 1)
 
-
     def test_persist(self):
-        test_info = { "a": 4 }
+        test_info = {"a": 4}
 
         p = Preferences(self.load, self.persist)
         p.set(1, 2, 3, test_info)
 
         persisted_data = {
-            "1" : {
+            "1": {
                 "2": {
                     "3": test_info
                 }
@@ -52,8 +54,7 @@ class PreferencesTest(unittest.TestCase):
         p = Preferences(None, None)
         p.set(1, 2, 3, test_info)
         result = p.get(1, 2, 3)
-        assert(test_info ==  result)
-
+        assert(test_info == result)
 
     def test_get_no_info(self):
         p = Preferences(self.load, None)
@@ -70,4 +71,3 @@ class PreferencesTest(unittest.TestCase):
 
         assert(self.info == p.get(1, 2, 4))
         assert(self.info == p.get(1, 3, 3))
-
