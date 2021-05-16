@@ -23,6 +23,9 @@ def same_audio(audio1, audio2) -> bool:
 def same_subtitle(subtitle1, subtitle2) -> bool:
     """Check if same subtitle, needed because other attributes can be differ"""
 
+    if subtitle1 == subtitle2:
+        return True
+
     if subtitle1 is None or subtitle2 is None:
         return False
 
@@ -122,6 +125,7 @@ class Tracker():
                             logger.debug("Setting audiostream: %d, %s, %s", stream,
                                          stored_info["audio"]["language"], stored_info["audio"]["name"])
                             self.set_audio_stream(stream)
+
                     if not same_subtitle(stored_info["subtitle"], current_subtitle):
                         logger.info(
                             "Current subtitle is different from data subtitle -> Overriding subtitle")
