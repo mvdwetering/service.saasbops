@@ -149,6 +149,9 @@ class Tracker():
                     self.preferences.set(show_id, season, episode, {
                         "audio": current_audio, "subtitle": current_subtitle})
 
+                    self.audio = current_audio
+                    self.subtitle = current_subtitle
+
         except Exception as e:
             logger.error(e)
 
