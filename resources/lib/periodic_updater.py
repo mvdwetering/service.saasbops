@@ -1,7 +1,5 @@
 import time
 
-def _update():
-    print("Update")
 
 class PeriodicUpdater():
     """
@@ -9,7 +7,7 @@ class PeriodicUpdater():
     Simple implementation, not accurate at all!
     """
 
-    def __init__ (self, period, callback):
+    def __init__(self, period, callback):
         self.period = period
         self._callback = callback
         self._last_update = time.time()
@@ -31,4 +29,3 @@ class PeriodicUpdater():
 
     def stop(self):
         self._running = False
-
