@@ -6,13 +6,14 @@ from typing import List
 
 import xbmcaddon
 
-from resources.lib import common
+from resources.lib import common, kodiutils
 
 ADDON = xbmcaddon.Addon()
 logger = logging.getLogger(ADDON.getAddonInfo('id'))
 
-def execute(commands:List[str]) ->  None:
-    command_handlers = [obj for name,obj in inspect.getmembers(sys.modules[__name__])
+
+def execute(commands: List[str]) -> None:
+    command_handlers = [obj for name, obj in inspect.getmembers(sys.modules[__name__])
                         if (inspect.isfunction(obj) and
                             name.startswith('command_') and name in commands)]
     any(ch() for ch in command_handlers)
@@ -21,8 +22,10 @@ def execute(commands:List[str]) ->  None:
 def command_reset_preferences() -> None:
     try:
         os.remove(common.get_preferences_filename())
+        kodiutils.notification("Reset preferences",
+                               "Preferences have been reset")
     except FileNotFoundError:
-        # Valid if no preferences were stored yet
+        # Expected if no preferences were stored yet
         pass
     except Exception:
         logger.exception("Deleting preference file failed")
