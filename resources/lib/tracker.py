@@ -56,14 +56,19 @@ class Tracker():
     def __init__(self, periodic_updater: PeriodicUpdater, preferences: Preferences):
         logger.debug("--> Tracker Init")
         self.preferences = preferences
+
         self.periodic_updater = periodic_updater
         periodic_updater._callback = self._update_item  # Hmmm
-        self.audio = None
-        self.subtitle = None
+
         self.set_audio_stream = None
         self.set_subtitle_stream = None
 
+        self.first_update = True
+        self.audio = None
+        self.subtitle = None
+
     def _reset(self):
+        self.first_update = True
         self.audio = None
         self.subtitle = None
 
@@ -77,7 +82,7 @@ class Tracker():
         logger.debug(sub)
         return sub
 
-    def _update_item(self, initial: bool = False):
+    def _update_item(self):
         logger.debug("--> Update item")
 
         item_info = get_item_info()
@@ -102,7 +107,7 @@ class Tracker():
             logger.debug(
                 "subtitle: %s", f'{current_subtitle["index"]}, {current_subtitle["language"]}, {current_subtitle["name"]}' if current_subtitle else "subtitles disabled")
 
-            if initial:
+            if self.first_update:
                 self.audio = current_audio
                 self.subtitle = current_subtitle
 
@@ -139,7 +144,7 @@ class Tracker():
                         if stream is not None and self.set_subtitle_stream:
                             self.set_subtitle_stream(enabled, stream)
 
-            if not initial:
+            if not self.first_update:
                 # Check for changes and store if different cause it is what the user specified
                 if not same_audio(self.audio, current_audio) or not same_subtitle(self.subtitle, current_subtitle):
                     logger.debug("same_audio: %s\n    %s\n    %s", same_audio(
@@ -152,13 +157,15 @@ class Tracker():
                     self.audio = current_audio
                     self.subtitle = current_subtitle
 
+            self.first_update = False
         except Exception as e:
             logger.error(e)
 
     def start(self):
         logger.debug("--> Start")
         self._reset()
-        self._update_item(initial=True)
+        # First update will be done at first periodic update
+        # which is a bit later, but Kodi sometimes seems to need some time?
         self.periodic_updater.start()
 
     def stop(self):
