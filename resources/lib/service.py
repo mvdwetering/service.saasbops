@@ -34,10 +34,11 @@ def run():
                 logger.debug("Read data from: %s", data_filename)
                 return data
         except:
-            logger.debug("Data file %s did not exist return empty dict", data_filename)
+            logger.debug(
+                "Data file %s did not exist return empty dict", data_filename)
             return {}
 
-    def persist(data):
+    def save(data):
         try:
             with open(data_filename, 'w') as data_file:
                 logger.debug(data)
@@ -47,7 +48,7 @@ def run():
             logger.exception(e)
             logger.error("Failed writing data file: %s", data_filename)
 
-    preferences = Preferences(load, persist)
+    preferences = Preferences(load, save)
     periodic_updater = PeriodicUpdater(1, None)
     tracker = Tracker(periodic_updater, preferences)
     player = SaasbopsPlayer(tracker)

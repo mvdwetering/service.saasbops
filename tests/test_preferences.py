@@ -25,17 +25,17 @@ class PreferencesTest(unittest.TestCase):
         self.load = Mock()
         self.load.return_value = self.initial_preference_data
 
-        self.persist = Mock()
+        self.save = Mock()
 
     def test_init(self):
         p = Preferences(None, None)
         p = Preferences(self.load, None)
         assert(self.load.call_count == 1)
 
-    def test_persist(self):
+    def test_save(self):
         test_info = {"a": 4}
 
-        p = Preferences(self.load, self.persist)
+        p = Preferences(self.load, self.save)
         p.set(1, 2, 3, test_info)
 
         persisted_data = {
@@ -45,8 +45,8 @@ class PreferencesTest(unittest.TestCase):
                 }
             }
         }
-        self.persist.assert_called_with(persisted_data)
-        assert(self.persist.call_count == 1)
+        self.save.assert_called_with(persisted_data)
+        assert(self.save.call_count == 1)
 
     def test_set(self):
         test_info = {"c": "d"}
