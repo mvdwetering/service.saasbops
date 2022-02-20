@@ -138,7 +138,7 @@ class Tracker():
                         logger.debug(item_props["subtitles"])
                         stream = find_subtitle_stream(
                             stored_info["subtitle"], item_props["subtitles"])
-                        logger.debug("Setting subtitlestream: %d, %s", stream,
+                        logger.debug("Setting subtitlestream: %s, %s", stream,
                                      f'{stored_info["subtitle"]["language"]}, {stored_info["subtitle"]["name"]}' if stored_info["subtitle"] else "subtitles disabled")
                         enabled = stored_info["subtitle"] is not None
                         if stream is not None and self.set_subtitle_stream:
